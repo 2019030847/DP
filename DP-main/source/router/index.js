@@ -25,43 +25,43 @@ router.post('/agenda', async (req,res) => {
 	let contactos = await dbContactos.Contactos.mostrarTodos();
 	if (!contactos.length) return res.render('agenda.html', { titulo : 'Agenda de distribuidores', contactos: [], contacto: null });
 
-	res.render('agenda.html', { titulo : 'Agenda de Contactos', contactos: contactos, contacto: null })
+	res.render('agenda.html', { titulo : 'Agenda de distribuidores', contactos: contactos, contacto: null })
 });
 
 router.post('/agenda/nuevo', async (req,res) => {
-	const { nombre, nombre2, Apellido_P, Apellido_M, Calle,NumCasa,Colonia, telefono1,telefono2 } = req.body;
+	const { nombre, Apellido_P, Apellido_M, calle, numcasa, colonia, numero1, numero2 } = req.body;
 
-	await dbContactos.Contactos.insertar({nombre, nombre2, Apellido_P, Apellido_M, Calle,NumCasa,Colonia, telefono1,telefono2});
+	await dbContactos.Contactos.insertar({nombre, Apellido_P, Apellido_M, calle, numcasa, colonia, numero1, numero2});
 
 	res.redirect('/agenda')
 });
 
 router.get('/agenda/id', async (req,res) => {
-	const { idContactos } = req.query;
-	if (!idContactos) return res.redirect('/agenda');
+	const { idDistribudor } = req.query;
+	if (!idDistribudor) return res.redirect('/agenda');
 
-	const contacto = await dbContactos.Contactos.buscarId(idContactos);
+	const contacto = await dbContactos.Contactos.buscarId(idDistribudor);
 	console.log(contacto);
-
-	res.render('agenda.html', { titulo: 'Agenda de Contactos', contactos: [], contacto: contacto[0]});
+	res.render('agenda.html', { titulo: 'Agenda de Distribuidores', contactos: [], contacto: contacto[0]});
 });
 
 router.post('/agenda/id', async (req,res) => {
-	const { Nombre1, Apellido_P, Apellido_M, Calle, Numero1, Id_Person } = req.body;
-	if (!Id_Person) return res.redirect('/agenda');
+	const { idDistribudor, nombre, Apellido_P, Apellido_M, calle, numcasa, colonia, numero1, numero2 } = req.body;
+	console.log(req.body);
+	if (!idDistribudor) return res.redirect('/agenda');
+	console.log(idDistribudor);
 
-	await dbContactos.Contactos.actualizar({Nombre1, Apellido_P, Apellido_M, Calle, Numero1, Id_Person});
+	await dbContactos.Contactos.actualizar({ idDistribudor, nombre, Apellido_P, Apellido_M, calle, numcasa, colonia, numero1, numero2});
 
 	res.redirect('/agenda');
 })
 
 router.post('/agenda/id/borrar', async (req,res) => {
+	const { idDistribudor } = req.body;
+	
+	if (!idDistribudor) return res.redirect('/agenda');
 
-	const { Id_Person } = req.body;
-	
-	if (!Id_Person) return res.redirect('/agenda');
-	
-	await dbContactos.Contactos.borrar(Id_Person);
+	await dbContactos.Contactos.borrar(idDistribudor);
 
 	res.redirect('/agenda');
 })

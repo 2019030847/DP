@@ -5,63 +5,31 @@ var Distribudores={}
 
 
 Distribudores.insertar = async function insertar(contacto){
-	console.log(contacto);
-	console.log(contacto.nombre);
-	console.log(contacto.nombre2);
-	console.log(contacto.Apellido_P);
-	console.log(contacto.Apellido_M);
-	console.log(contacto.Calle);
-	console.log(contacto.NumCasa);
-	console.log(contacto.Colonia);
-	console.log(contacto.telefono1);
-	console.log(contacto.telefono2);
-
-    var sqlConsulta = "INSERT INTO persons set Nombre1 =?, Nombre2 =?, Apellido_P =?, Apellido_M =?";
-	let data = [contacto.nombre,contacto.nombre2,contacto.Apellido_P,contacto.Apellido_M];
-
-	
-
-	let response =[];
-	let response2 =[];
-	let response3 =[];
-	let response4 =[];
 
 	try {
-		response = await conexion.query(sqlConsulta, data);
-		console.log(response);
+		const person = await conexion.query('INSERT INTO persons SET Nombre1 = ?, Apellido_P = ?, Apellido_M = ? ', [contacto.nombre, contacto.Apellido_P, contacto.Apellido_M]);
+		const address = await conexion.query('INSERT INTO addresses SET Calle = ?, Num_Casa = ?, Colonia = ? ', [contacto.calle, contacto.numcasa, contacto.colonia]);
+		const phone_numer = await conexion.query('INSERT INTO phone_numers SET Numero1 = ?, Numero2 = ?', [contacto.numero1, contacto.numero2]);
 
-		var sqlConsultaNumbers = "INSERT INTO phone_numers set Id_Person = ?, Numero1 = ?, Numero2 = ?";
-		let dataNumbers = [response.insertId,contacto.telefono1,contacto.telefono2];
-
-		response2 = await conexion.query(sqlConsultaNumbers, dataNumbers);
-
-		var sqlConsultaDirecc = "INSERT INTO addresses set Id_Person = ?, Calle = ?, Num_Casa = ?,Colonia = ?";
-		let dataDirecc = [response.insertId,contacto.Calle,contacto.NumCasa,contacto.Colonia];
-
-		response3 = await conexion.query(sqlConsultaDirecc, dataDirecc);
-
-		var sqlConsultaDistri = "INSERT INTO distributors set Fecha_R = ?, persons_id = ?, addresses_id = ?, phone_numers_id = ?";
-		let dataDistri = ['NOW()',response.insertId,response.insertId,response.insertId];
-
-		response3 = await conexion.query(sqlConsultaDistri, dataDistri);
-
-
+		await conexion.query('INSERT INTO distributors SET Fecha_R = now(), persons_id = ?,addresses_id = ?, phone_numers_id = ?', [person.insertId, address.insertId, phone_numer.insertId]);
 
 	} catch (error) {
 		console.log(error);
-		return error;
-	}
+		return error
+	};
 
-	return response;
+	return true;
 }
 
 Distribudores.mostrarTodos = async function mostrarTodos(){
-    var sqlConsulta = "SELECT * FROM distributors left join addresses on distributors.addresses_id = addresses.id_person left join persons on distributors.persons_id = persons.id_ left join phone_numers on distributors.phone_numers_id = phone_numers.id_person";
+    var sqlConsulta = `SELECT distributors.id_, addresses.Calle, addresses.Num_Casa, addresses.Colonia, persons.Nombre1, persons.Apellido_P, persons.Apellido_M, phone_numers.Numero1, phone_numers.Numero2 FROM distributors 
+	inner join addresses on distributors.addresses_id = addresses.id_ 
+	inner join persons on distributors.persons_id = persons.id_
+	inner join phone_numers on distributors.phone_numers_id = phone_numers.id_`;
 	let response =[];
 
 	try {
 		response = await conexion.query(sqlConsulta);
-		console.log(response);
 	} catch (error) {
 		console.log(error);
 		return error;
@@ -70,13 +38,15 @@ Distribudores.mostrarTodos = async function mostrarTodos(){
 }
 
 Distribudores.buscarId = async function buscarId(id){
-    var sqlConsulta = "SELECT * FROM distributors left join addresses on distributors.addresses_id = addresses.id_person left join persons on distributors.persons_id = persons.id_ left join phone_numers on distributors.phone_numers_id = phone_numers.id_person WHERE distributors.persons_id = ?";
+    var sqlConsulta = `SELECT distributors.id_, addresses.Calle, addresses.Num_Casa, addresses.Colonia, persons.Nombre1, persons.Apellido_P, persons.Apellido_M, phone_numers.Numero1, phone_numers.Numero2 FROM distributors 
+	inner join addresses on distributors.addresses_id = addresses.id_ 
+	inner join persons on distributors.persons_id = persons.id_
+	inner join phone_numers on distributors.phone_numers_id = phone_numers.id_
+	WHERE distributors.id_ = ?`;
 	let response = [];
 
 	try {
 		response = await conexion.query(sqlConsulta,[id]);
-
-
 	} catch (error) {
 		console.log(error);
 		return error;
@@ -86,48 +56,43 @@ Distribudores.buscarId = async function buscarId(id){
 }
 
 Distribudores.borrar = async function borrar(id){
-    var sqlConsulta1 = "DELETE FROM distributors WHERE persons_id = ?";
-	var sqlConsulta2 = "DELETE FROM addresses WHERE id_person = ?";
-	var sqlConsulta3 = "DELETE FROM persons WHERE id_ = ?";
-	var sqlConsulta4 = "DELETE FROM phone_numers WHERE id_person = ?";
-	
-	let response = [];
+	const distributor = await conexion.query('SELECT * FROM distributors WHERE id_ = ?', id);
+
+	if (!distributor || !distributor[0]) return [];
 
 	try {
-		response = await conexion.query(sqlConsulta1,[id]);
-		response = await conexion.query(sqlConsulta2,[id]);
-		response = await conexion.query(sqlConsulta3,[id]);
-		response = await conexion.query(sqlConsulta4,[id]);
+		await conexion.query('DELETE FROM persons WHERE id_ = ?', [distributor[0].persons_id]);
+		await conexion.query('DELETE FROM addresses WHERE id_ = ?', [distributor[0].addresses_id]);
+		await conexion.query('DELETE FROM phone_numers WHERE id_ = ?', [distributor[0].phone_numers_id]);
+
+		await conexion.query('DELETE FROM distributors WHERE id_ = ?', [ distributor[0].id_]);
 	} catch (error) {
 		console.log(error);
 		return error;
 	}
 
-	return response;
+	return true;
 }
 
 Distribudores.actualizar = async function actualizar(contacto){
-	console.log(contacto);
-    var sqlConsulta1 = "UPDATE persons SET Nombre1 =?, Apellido_P=?, Apellido_M =? where id_ = ?";
-	var sqlConsulta2 = "UPDATE addresses SET Calle =?";
-	var sqlConsulta3 = "UPDATE phone_numers SET Numero1 =?";
 
-    let data1 = [contacto.Nombre1, contacto.Apellido_P, contacto.Apellido_M,contacto.Id_Person];
-	let data2 = [contacto.Calle];
-	let data3 = [contacto.Numero1];
+	const distributor = await conexion.query('SELECT * FROM distributors WHERE id_ = ?', contacto.idDistribudor);
 
-	let response = [];
+	console.log(distributor);
+
+	if (!distributor || !distributor[0]) return [];
+
 
 	try {
-		response = await conexion.query(sqlConsulta1,data1);
-		response = await conexion.query(sqlConsulta2,data2);
-		response = await conexion.query(sqlConsulta3,data3);
+		await conexion.query('UPDATE persons SET Nombre1 = ?, Apellido_P = ?, Apellido_M = ? WHERE id_ = ?', [contacto.nombre, contacto.Apellido_P, contacto.Apellido_M, distributor[0].persons_id]);
+		await conexion.query('UPDATE addresses SET Calle = ?, Num_Casa = ?, Colonia = ? WHERE id_ = ?', [contacto.calle, contacto.numcasa, contacto.colonia, distributor[0].addresses_id]);
+		await conexion.query('UPDATE phone_numers SET Numero1 = ?, Numero2 = ? WHERE id_ = ?', [contacto.numero1, contacto.numero2, distributor[0].phone_numers_id]);
 	} catch (error) {
 		console.log(error);
 		return error;
 	}
 
-	return response;
+	return true;
 }
 
 module.exports = {Contactos: Distribudores}
