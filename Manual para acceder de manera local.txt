@@ -1,0 +1,24 @@
+1- Descargar los archivos del repositorio: https://github.com/2019030847/DP
+(trabajaremos solo con la carpeta "DP-main" y el archivo "DP".
+
+2- Abrimos el archivo DP, nos aparecera las tablas de BD, aprimimos "ctrol + G" para poder crear nuestra base de datos.
+
+3- Abrir VisualCode despues arrastramos la carpera "DP-main" para poder trabajar con ella.
+3- abrimos la terminal e instalamos las dependencias ejs, express, mysql, nodemon y path,
+
+Comando para instalacion: npm i (dependencia)
+  npm i ejs
+  npm i express
+  npm i mysql
+  npm i nodemon
+  npm i path
+
+y para poder arrancar el servidor, desde la misma terminal, utilizamos el comando: nodemon/ source/app
+
+Deberia de aparecer 2 mensajes las cuales seria "Trabajando servidor" que quiere decir que el servidor esta activo, y "Se conecto con exito" que se refiere a que la conexion con la base de dato a sido exitosa.
+
+Para poder verla pagina nos dirigimos a nuestro navegador y colocamos el siguiente link: http://localhost:3000/agenda
+
+Aqui nos aparecera 3 tablas el cual podemos Crear, Ver, Actualizar y Eliminar informacion.
+
+Esta parte no esta terminado, por el momento solo podemos ver informacion, agregar nueva informacion y actualizar informacion.
