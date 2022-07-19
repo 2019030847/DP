@@ -1,0 +1,123 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema DP1
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema DP1
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `DP1` DEFAULT CHARACTER SET utf8 ;
+USE `DP1` ;
+
+-- -----------------------------------------------------
+-- Table `DP1`.`addresses`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `DP1`.`addresses` (
+  `id_` INT NOT NULL,
+  `Calle` VARCHAR(45) NOT NULL,
+  `Num_Casa` INT(6) NOT NULL,
+  `Colonia` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `DP1`.`persons`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `DP1`.`persons` (
+  `id_` INT NOT NULL,
+  `Nombre1` VARCHAR(45) NOT NULL,
+  `Nombre2` VARCHAR(45) NOT NULL,
+  `Apellido_P` VARCHAR(45) NOT NULL,
+  `Apellido_M` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `DP1`.`phone_numers`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `DP1`.`phone_numers` (
+  `id_` INT NOT NULL,
+  `Numero1` INT(11) NOT NULL,
+  `Numero2` INT(11) NOT NULL,
+  PRIMARY KEY (`id_`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `DP1`.`distributors`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `DP1`.`distributors` (
+  `id_` INT NOT NULL,
+  `Fecha_R` DATE NOT NULL,
+  `persons_id` INT NOT NULL,
+  `addresses_id` INT NOT NULL,
+  `phone_numers_id` INT NOT NULL,
+  PRIMARY KEY (`id_`),
+  INDEX `fk_distributors_persons_idx` (`persons_id` ASC) VISIBLE,
+  INDEX `fk_distributors_addresses_idx` (`addresses_id` ASC) VISIBLE,
+  INDEX `fk_distributors_phone_numers_idx` (`phone_numers_id` ASC) VISIBLE,
+  CONSTRAINT `fk_distributors_persons`
+    FOREIGN KEY (`persons_id`)
+    REFERENCES `DP1`.`persons` (`id_`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_distributors_addresses`
+    FOREIGN KEY (`addresses_id`)
+    REFERENCES `DP1`.`addresses` (`id_`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_distributors_phone_numers`
+    FOREIGN KEY (`phone_numers_id`)
+    REFERENCES `DP1`.`phone_numers` (`id_`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = '	';
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+use dp1;
+
+/*Mostrar toda la informacion*/
+
+SELECT distributors.id_, persons.Nombre1, persons.Apellido_P, persons.Apellido_M, addresses.Calle, addresses.Num_Casa, addresses.Colonia, phone_numers.Numero1, phone_numers.Numero2 FROM distributors 
+inner join persons on distributors.persons_id = persons.id_
+inner join addresses on distributors.addresses_id = addresses.id_ 
+inner join phone_numers on distributors.phone_numers_id = phone_numers.id_
+WHERE distributors.id_;
+
+INSERT INTO `distributors` (id_, Fecha_R, persons_id, addresses_id, phone_numers_id) VALUES (2, "2013-09-23", 2, 2, 2);
+INSERT INTO `phone_numers` (id_, Numero1, Numero2) VALUES (2, 123456789, 123456789);
+INSERT INTO `addresses` (id_, Calle, Num_Casa, Colonia) VALUES (2, "Rumania", "1", "Santa Cruz");
+INSERT INTO `persons` (id_, Nombre1, Apellido_P, Apellido_M) VALUES (2, "Luis Gerardo", "Galicia", "Thompson");
+
+    
+DELETE FROM persons WHERE id_;
+DELETE FROM addresses WHERE id_;
+DELETE FROM phone_numers WHERE id_;
+DELETE FROM distributors WHERE id_;
+    
+SELECT * FROM distributors WHERE id_;
+
+UPDATE persons SET Nombre1, Apellido_P, Apellido_M  WHERE id_;
+UPDATE addresses SET Calle, Num_Casa, Colonia WHERE id_;
+UPDATE phone_numers SET Numero1, Numero2  WHERE id_; 
+
+/*Buscar*/
+
+SELECT distributors.id_, addresses.Calle, addresses.Num_Casa, addresses.Colonia, persons.Nombre1, persons.Apellido_P, persons.Apellido_M, phone_numers.Numero1, phone_numers.Numero2 FROM distributors 
+inner join addresses on distributors.addresses_id = addresses.id_ 
+inner join persons on distributors.persons_id = persons.id_
+inner join phone_numers on distributors.phone_numers_id = phone_numers.id_
+WHERE distributors.id_;
