@@ -29,9 +29,9 @@ router.post('/agenda', async (req,res) => {
 });
 
 router.post('/agenda/nuevo', async (req,res) => {
-	const { nombre, apellido_P, apellido_M, domicilio, telefono } = req.body;
+	const { nombre, nombre2, Apellido_P, Apellido_M, Calle,NumCasa,Colonia, telefono1,telefono2 } = req.body;
 
-	await dbContactos.Contactos.insertar({nombre, apellido_P, apellido_M, domicilio, telefono});
+	await dbContactos.Contactos.insertar({nombre, nombre2, Apellido_P, Apellido_M, Calle,NumCasa,Colonia, telefono1,telefono2});
 
 	res.redirect('/agenda')
 });
@@ -41,26 +41,27 @@ router.get('/agenda/id', async (req,res) => {
 	if (!idContactos) return res.redirect('/agenda');
 
 	const contacto = await dbContactos.Contactos.buscarId(idContactos);
+	console.log(contacto);
 
 	res.render('agenda.html', { titulo: 'Agenda de Contactos', contactos: [], contacto: contacto[0]});
 });
 
 router.post('/agenda/id', async (req,res) => {
-	const { idContactos, nombre, domicilio, telefono } = req.body;
-	if (!idContactos) return res.redirect('/agenda');
+	const { Nombre1, Apellido_P, Apellido_M, Calle, Numero1, Id_Person } = req.body;
+	if (!Id_Person) return res.redirect('/agenda');
 
-	await dbContactos.Contactos.actualizar({nombre, apellido_P, apellido_M, domicilio, telefono, id_});
+	await dbContactos.Contactos.actualizar({Nombre1, Apellido_P, Apellido_M, Calle, Numero1, Id_Person});
 
 	res.redirect('/agenda');
 })
 
 router.post('/agenda/id/borrar', async (req,res) => {
 
-	const { idContactos } = req.body;
+	const { Id_Person } = req.body;
 	
-	if (!idContactos) return res.redirect('/agenda');
+	if (!Id_Person) return res.redirect('/agenda');
 	
-	await dbContactos.Contactos.borrar(idContactos);
+	await dbContactos.Contactos.borrar(Id_Person);
 
 	res.redirect('/agenda');
 })

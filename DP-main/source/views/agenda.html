@@ -25,7 +25,7 @@
 							<tbody>
 								<% for(var i=0; i < contactos.length; i++ ) { %>
 								<tr>
-									<td><%= contactos[i].id_ %></td>
+									<td><%= contactos[i].Id_Person %></td>
 									<td><%= contactos[i].Nombre1 %></td>
 									<td><%= contactos[i].Apellido_P %></td>
 									<td><%= contactos[i].Apellido_M %></td>
@@ -59,22 +59,22 @@
 						<% if ( contacto ) { %>
 							<div class="card-footer">
 								<form action="/agenda/id" method="post" class="form-group col-md-8">
-									<input type="hidden" name="idContactos" id="id_" value="<%=contacto.id_%>">
+									<input type="hidden" name="Id_Person" id="Id_Person" value="<%=contacto.Id_Person%>">
 									<label for="nombre" class="mb-3" style="font-weight: bold;">Nombre:</label>
-									<input type="text" id="nombre" name="nombre" placeholder="Juan Perez" class="form-control" value="<%=contacto.Nombre1%>">
+									<input type="text" id="Nombre1" name="Nombre1" placeholder="Juan Perez" class="form-control" value="<%=contacto.Nombre1%>">
 									<label for="nombre" class="mb-3" style="font-weight: bold;">Apellido_P:</label>
-									<input type="text" id="nombre" name="nombre" placeholder="Juan Perez" class="form-control" value="<%=contacto.Apellido_P%>">
+									<input type="text" id="Apellido_P" name="Apellido_P" placeholder="Juan Perez" class="form-control" value="<%=contacto.Apellido_P%>">
 									<label for="nombre" class="mb-3" style="font-weight: bold;">Apellido_M:</label>
-									<input type="text" id="nombre" name="nombre" placeholder="Juan Perez" class="form-control" value="<%=contacto.Apellido_M%>">
+									<input type="text" id="Apellido_M" name="Apellido_M" placeholder="Juan Perez" class="form-control" value="<%=contacto.Apellido_M%>">
 									<label for="domicilio" class="mb-3" style="font-weight: bold;">Domicilio:</label>
-									<input type="text" id="domicilio" name="domicilio" placeholder="Calle Falsa 123" class="form-control" value="<%=contacto.Calle%>">
+									<input type="text" id="Calle" name="Calle" placeholder="Calle Falsa 123" class="form-control" value="<%=contacto.Calle%>">
 									<label for="telefono" class="mb-3" style="font-weight: bold;">Telefono:</label>
-									<input type="text" id="telefono" name="telefono" placeholder="Telefono" class="form-control" value="<%=contacto.numero1%>">
+									<input type="text" id="Numero1" name="Numero1" placeholder="Telefono" class="form-control" value="<%=contacto.Numero1%>">
 									<button type="submit" class="mt-3">Guardar</button>
 								</form>
 	
 								<form action="/agenda/id/borrar" method="post">
-									<input type="hidden" name="idContactos" id="idContactos" value="<%=contacto.id_%>">
+									<input type="hidden" name="Id_Person" id="Id_Person" value="<%=contacto.Id_Person%>">
 									<button type="submit" class="mt-3">Eliminar</button>
 								</form>
 							</div>
@@ -94,24 +94,36 @@
 								<input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombres">
 							</div>
 							<div class="col-md-4">
-								<label for="nombre">Apellido Paterno</label>
-								<input type="text" name="nombre" id="Apellido_P" class="form-control" placeholder="Apellido">
+								<label for="nombre2">Nombre 2</label>
+								<input type="text" name="nombre2" id="nombre2" class="form-control" placeholder="Nombre 2">
 							</div>
 							<div class="col-md-4">
-								<label for="nombre">Apellido Materno</label>
-								<input type="text" name="nombre" id="Apellido_M" class="form-control" placeholder="Apellido">
+								<label for="Apellido_P">Apellido Paterno</label>
+								<input type="text" name="Apellido_P" id="Apellido_P" class="form-control" placeholder="Apellido">
 							</div>
 							<div class="col-md-4">
-								<label for="domicilio">Domicilio</label>
-								<input type="text" name="domicilio" id="domicilio" class="form-control" placeholder="Calle Falsa 123">
+								<label for="Apellido_M">Apellido Materno</label>
+								<input type="text" name="Apellido_M" id="Apellido_M" class="form-control" placeholder="Apellido">
 							</div>
 							<div class="col-md-4">
-								<label for="telefono">Telefono 1</label>
-								<input type="text" name="telefono" id="telefono" class="form-control" placeholder="+52 000 000 0000">
+								<label for="Calle">Calle</label>
+								<input type="text" name="Calle" id="Calle" class="form-control" placeholder="Calle Falsa">
 							</div>
 							<div class="col-md-4">
-								<label for="telefono">Telefono 2</label>
-								<input type="text" name="telefono" id="telefono" class="form-control" placeholder="+52 000 000 0000">
+								<label for="NumCasa">Numero Casa</label>
+								<input type="text" name="NumCasa" id="NumCasa" class="form-control" placeholder="123">
+							</div>
+							<div class="col-md-4">
+								<label for="Colonia">Colonia</label>
+								<input type="text" name="Colonia" id="Colonia" class="form-control" placeholder="Colonia">
+							</div>
+							<div class="col-md-4">
+								<label for="telefono1">Telefono 1</label>
+								<input type="text" name="telefono1" id="telefono1" class="form-control" placeholder="+52 000 000 0000">
+							</div>
+							<div class="col-md-4">
+								<label for="telefono2">Telefono 2</label>
+								<input type="text" name="telefono2" id="telefono2" class="form-control" placeholder="+52 000 000 0000">
 							</div>
 						</div>
 						<div class="float-right mt-3">
