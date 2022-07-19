@@ -12,11 +12,6 @@ router.get('/',(req,res)=>{
     res.send("Iniciamos Servidor");
 });
 
-router.get('/index',(req,res)=>{
-	res.render('index.html',{titulo:'Index'})
-});
-
-
 router.get('/agenda',(req,res) => {
 	res.render('agenda.html', { titulo : 'Agenda de distribuidores', contactos: [], contacto: null })
 });
